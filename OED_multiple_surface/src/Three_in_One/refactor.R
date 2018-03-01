@@ -12,7 +12,7 @@ library(mlegp)
 # set_name = args[6]
 # noise_level = as.integer(args[7])
 
-method = "MI"
+method = "EN"
 
 add = 3
 iter_num = 40
