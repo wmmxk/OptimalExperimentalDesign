@@ -1,0 +1,39 @@
+source("../setpath.R")
+
+
+folders=c("errors3syn")
+method = "MI"
+k=1
+filenames = c("every_1_120_iter.csv","every_2_60_iter.csv","every_5_24_iter.csv")
+
+batch1= read.csv(file.path(out_data_path,folders[k],method,filenames[1]), header=TRUE)
+
+batch2 = read.csv(file.path(out_data_path,folders[k],method,filenames[2]), header=TRUE)
+batch5 = read.csv(file.path(out_data_path,folders[k],method,filenames[3]), header=TRUE)
+
+baseline = read.csv(file.path(out_data_path,folders[k],"Random",filenames[1]), header=TRUE)
+
+
+n = 100
+size = 1.3
+errors = matrix(nrow=n,ncol=3)
+
+
+par(fig = c(0,1,0,1))
+par(mar=c(6,6,4,4))
+pdf(file.path(out_fig_path,paste("batchsize_syn",method,".pdf",sep="")))
+
+plot(seq(1,n,1), batch1[1:n,2]*100, col=4,type='l',ylim=c(0,max(batch1[,2])*100),xlab="# of samples",
+     ylab="MAE (%)",cex.lab = size,cex.axis = size,main=method)
+i=2
+lines(c(seq(1,n,2),100), batch2[1:51,2]*100, col=i)
+i=3
+lines(c(seq(1,n,5),100), batch5[1:21,2]*100, col=i)
+
+lines(seq(1,n,1), baseline[1:100,2]*100, col=5)
+
+legend("topright",xpd=TRUE, legend=c("Random","Batch size=5","Batch size=2","Batch size=1"),bty="n",
+       col=c(5,3,2,4),lty=c(1,1,1,1),cex=size*0.8)
+
+
+dev.off()
