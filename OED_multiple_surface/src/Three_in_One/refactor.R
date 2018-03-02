@@ -11,11 +11,11 @@ library(mlegp)
 # random_seed = as.integer(args[5])
 # set_name = args[6]
 # noise_level = as.integer(args[7])
+# method = args[8]
 
-method = "EN"
-
+method = "MI"
 add = 3
-iter_num = 40
+iter_num = 60
 pool_size = 500
 start_size = 50
 random_seed= 1
@@ -26,7 +26,8 @@ noise_level = 0
 file_path = file.path(data_path,paste(set_name,".csv",sep=""))
 
 Rcodes = c("prepare_train.R","compute_kernel.R","predict_benchmark.R",
-           "update_train_pool.R","save_res.R","screen_index.R","train_GP.R")
+           "update_train_pool.R","save_res.R","screen_index.R",
+           "train_GP.R","max_dist.R","compute_MI_denominator.R")
 for (Rcode in Rcodes) {
   source(file.path(helper_path,Rcode))
 }
