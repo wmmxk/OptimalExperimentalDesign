@@ -1,4 +1,6 @@
-train_GP <- function (train) {
+train_GP <- function (train,add) {
+  #if the last added datapoints causes a numerical issue, remove it.
+  
   fit=mlegp(train[,1:2],train[,3])
   # if the new coming data causes a problem remove it.
   while (is.na(fit["sig2"])) {

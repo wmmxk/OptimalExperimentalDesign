@@ -2,28 +2,29 @@ source("../setpath.R")
 
 library(mlegp)
 
-# args = commandArgs(TRUE)
-# add = as.integer(args[1])
-# iter_num = as.integer(args[2])
-# pool_size = as.integer(args[3])
-# start_size = as.integer(args[4])
-# 
-# random_seed = as.integer(args[5])
-# set_name = args[6]
-# noise_level = as.integer(args[7])
-# method = args[8]
+args = commandArgs(TRUE)
+set_id = args[1]
+noise_level = as.integer(args[2])
+random_seed = as.integer(args[3])
+method = args[4]
 
-method = "MI"
-add = 3
-iter_num = 60
-pool_size = 500
+add = as.integer(args[5])
+iter_num = as.integer(args[6])
+
+# set_id = 4
+# noise_level = 0
+# random_seed = 1
+# method = "Random"
+# add = 2
+# iter_num = 30
+
+
+pool_size = 650
 start_size = 50
-random_seed= 1
-set_name = 1
-noise_level = 0
 
 
-file_path = file.path(data_path,paste(set_name,".csv",sep=""))
+
+file_path = file.path(data_path,paste(set_id,".csv",sep=""))
 
 Rcodes = c("prepare_train.R","compute_kernel.R","predict_benchmark.R",
            "update_train_pool.R","save_res.R","screen_index.R",
@@ -51,7 +52,7 @@ for (p in 1:(iter_num+1))
 cat("iteration: ",p-1, "\n")
 cat(" Before train size", nrow(train_bad),"\n")
   
-model_tr = train_GP(train)
+model_tr = train_GP(train,add)
 fit = model_tr$model
 train = model_tr$train
 
@@ -71,7 +72,7 @@ train_bad = res$train_bad
 
 }
 
-save_res(out_data_path,set_name,noise_level,random_seed,add,iter_num,errors,train_bad,method)
+save_res(out_data_path,set_id,noise_level,random_seed,add,iter_num,errors,train_bad,method)
 
 
 # 

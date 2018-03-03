@@ -29,3 +29,11 @@ def f3(X,Y):
             Z[i,j] = np.abs(1.0/(z**7-2)**1)
     return Z
             
+
+def f4(X,Y):
+    Z = X*0
+    for i in range(len(X)):
+        for j in range(len(Y)):
+            Z[i,j] = np.random.normal(0,1,1)
+    return Z
+
