@@ -2,26 +2,24 @@ source("../setpath.R")
 
 library(mlegp)
 
-args = commandArgs(TRUE)
-set_id = args[1]
-noise_level = as.integer(args[2])
-random_seed = as.integer(args[3])
-method = args[4]
+# args = commandArgs(TRUE)
+# set_id = args[1]
+# noise_level = as.integer(args[2])
+# random_seed = as.integer(args[3])
+# method = args[4]
+# 
+# add = as.integer(args[5])
+# iter_num = as.integer(args[6])
 
-add = as.integer(args[5])
-iter_num = as.integer(args[6])
-
-# set_id = 4
-# noise_level = 0
-# random_seed = 1
-# method = "Random"
-# add = 2
-# iter_num = 30
-
+set_id = 2
+noise_level = 0
+random_seed = 1
+method = "EN"
+iter_num = 180
+add = 1
 
 pool_size = 650
 start_size = 50
-
 
 
 file_path = file.path(data_path,paste(set_id,".csv",sep=""))
@@ -45,30 +43,32 @@ errors = as.numeric()
 
 ptm <- proc.time()  
 
+indexes = as.numeric()
 
-for (p in 1:(iter_num+1))
+for (p in 174:(iter_num+1))
 {
+  cat("iteration: ",p-1, "\n")
+  cat(" Before train size", nrow(train_bad),"\n")
+    
+  model_tr = train_GP(train,add)
+  fit = model_tr$model
+  train = model_tr$train
   
-cat("iteration: ",p-1, "\n")
-cat(" Before train size", nrow(train_bad),"\n")
   
-model_tr = train_GP(train,add)
-fit = model_tr$model
-train = model_tr$train
-
-
-cat("iteration: ",p-1,"\n")
-cat("train size", nrow(train_bad),"\n")
-
-errors[p] =  predict_benchmark(fit,train,benchmark,unfold=FALSE) 
-select_index = screen_index(fit,train,pool,add,method)# This part is different for different OED method
-
-
-res = update_train_pool(select_index,train,train_bad,pool,pool_all,noise_level)
-train = res$train
-pool = res$pool
-pool_all = res$pool_all
-train_bad = res$train_bad
+  cat("iteration: ",p-1,"\n")
+  cat("train size", nrow(train_bad),"\n")
+  
+  errors[p] =  predict_benchmark(fit,train,benchmark,unfold=FALSE) 
+  select_index = screen_index(fit,train,pool,add,method)# This part is different for different OED method
+  if (add==1 && (p%%5==0)) {
+    select_index = c(1)
+  }
+  indexes = c(indexes,select_index[1])
+  res = update_train_pool(select_index,train,train_bad,pool,pool_all,noise_level)
+  train = res$train
+  pool = res$pool
+  pool_all = res$pool_all
+  train_bad = res$train_bad
 
 }
 
