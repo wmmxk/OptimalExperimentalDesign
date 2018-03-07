@@ -11,14 +11,14 @@ library(mlegp)
 # add = as.integer(args[5])
 # iter_num = as.integer(args[6])
 
-set_id = 2
-noise_level = 0
+set_id = 3
+noise_level = 6
 random_seed = 1
 method = "EN"
-iter_num = 180
+iter_num = 150
 add = 1
 
-pool_size = 650
+pool_size = 600
 start_size = 50
 
 
@@ -31,7 +31,7 @@ for (Rcode in Rcodes) {
   source(file.path(helper_path,Rcode))
 }
 
-data = prepare_train(file_path,random_seed,start_size,noise_level)
+data = prepare_train(file_path,random_seed,start_size,noise_level,pool_size)
 train = data$train
 pool = data$pool
 pool_all = data$pool_all
@@ -45,7 +45,7 @@ ptm <- proc.time()
 
 indexes = as.numeric()
 
-for (p in 174:(iter_num+1))
+for (p in 1:(iter_num+1))
 {
   cat("iteration: ",p-1, "\n")
   cat(" Before train size", nrow(train_bad),"\n")
@@ -69,10 +69,13 @@ for (p in 174:(iter_num+1))
   pool = res$pool
   pool_all = res$pool_all
   train_bad = res$train_bad
-
+  
+  
+  save_res(out_data_path,set_id,noise_level,random_seed,add,iter_num,errors,train_bad,method,bad=TRUE,epoch=p)
+  save_res(out_data_path,set_id,noise_level,random_seed,add,iter_num,errors,train,method,bad=FALSE,epoch=p)
+  
 }
 
-save_res(out_data_path,set_id,noise_level,random_seed,add,iter_num,errors,train_bad,method)
 
 
 # 

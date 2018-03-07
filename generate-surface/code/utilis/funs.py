@@ -1,5 +1,8 @@
 import numpy as np
 
+import random
+import matplotlib.mlab as mlab
+
 def f1(f, phi,d=0.1,k=5):
     '''
     f: frequency
@@ -37,3 +40,18 @@ def f4(X,Y):
             Z[i,j] = np.random.normal(0,1,1)
     return Z
 
+def f5(X,Y,random_seed=2017,sigma=0.5):
+    '''
+    superposition multiple Gaussian distributions
+    '''
+    random.seed(random_seed)
+    for i in range(300):
+        mu1,mu2 = np.array([random.uniform(-10,10) for i in range(2)])
+        sigma1 = random.uniform(sigma,3)
+        sigma2 = random.uniform(sigma*0.8,4)
+        sigma12 = random.uniform(min(sigma1,sigma2)/20,min(sigma1,sigma2)/2)
+        if i ==0:
+            Z = mlab.bivariate_normal(X,Y,sigma1, sigma2,mu1,mu2,sigma12)
+        else:
+            Z = Z + mlab.bivariate_normal(X,Y,sigma1, sigma2,mu1,mu2,sigma12)
+    return Z

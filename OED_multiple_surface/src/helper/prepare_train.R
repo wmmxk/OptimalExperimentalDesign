@@ -11,12 +11,14 @@ prepare_train <- function (file_path,random_seed,start_size,noise_level,pool_siz
   
   if (noise_level>0) {
     train = rbind(train,train)
-    train[,3] = train[,3] + rnorm(nrow(train), sd=std)
+    train[,3] = train[,3] + rnorm(nrow(train), sd=train[,3]*noise_level*0.01)
   }
   
-  pool_all = data_all[(start_size+1):(start_size+pool_size),]
-  pool = pool_all[1:500,]
-  benchmark = data_all[(start_size+pool_size):nrow(data_all),]
+  pool = data_all[(start_size+1):(start_size+pool_size),]
+  pool_all = data_all[(start_size+pool_size+1):(start_size+1300),]
+
+
+  benchmark = data_all[(start_size+1301):nrow(data_all),]
   
   res = list("train" = train, "pool" = pool, "pool_all" = pool_all,"benchmark"=benchmark)
   return(res)

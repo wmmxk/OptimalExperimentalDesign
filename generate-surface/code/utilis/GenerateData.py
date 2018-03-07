@@ -16,4 +16,4 @@ class GenerateData(object):
         d3 = data.reshape((3,-1))
         d3 = d3.transpose((1,0))
         np.random.shuffle(d3)
-        return d3
+        return (d3,x,y,z)

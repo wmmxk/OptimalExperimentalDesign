@@ -7,7 +7,7 @@ update_train_pool <- function (select_index,train,train_bad,pool,pool_all,noise_
   if (noise_level > 0) {
         without_noise = adddata[,3]
         for (dup in 1:2) {
-          noises = rnorm(nrow(adddata),0,noise_level*0.01)
+          noises = rnorm(nrow(adddata),0,without_noise*noise_level*0.01)
           adddata[,3] = without_noise + noises
           train=t(data.frame(t(train),t(adddata)))
           train_bad=t(data.frame(t(train_bad),t(adddata)))
